@@ -1,0 +1,7 @@
+"/home/firas/Appcelerator_Studio_Workspace2/AnnuaireEntrepriseLUMD/build/android/gen/android/support/v7/appcompat/R.java"
+"/home/firas/Appcelerator_Studio_Workspace2/AnnuaireEntrepriseLUMD/build/android/gen/com/annuaireentrepriselumd/AnnuaireentrepriselumdActivity.java"
+"/home/firas/Appcelerator_Studio_Workspace2/AnnuaireEntrepriseLUMD/build/android/gen/com/annuaireentrepriselumd/AnnuaireentrepriselumdAppInfo.java"
+"/home/firas/Appcelerator_Studio_Workspace2/AnnuaireEntrepriseLUMD/build/android/gen/com/annuaireentrepriselumd/AnnuaireentrepriselumdApplication.java"
+"/home/firas/Appcelerator_Studio_Workspace2/AnnuaireEntrepriseLUMD/build/android/gen/com/annuaireentrepriselumd/ApplicationStylesheet.java"
+"/home/firas/Appcelerator_Studio_Workspace2/AnnuaireEntrepriseLUMD/build/android/gen/com/annuaireentrepriselumd/R.java"
+"/home/firas/Appcelerator_Studio_Workspace2/AnnuaireEntrepriseLUMD/build/android/gen/ti/modules/titanium/ui/R.java"
