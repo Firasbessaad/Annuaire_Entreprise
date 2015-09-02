@@ -1,0 +1,96 @@
+#results {
+  display: none;
+	width: 204px;
+	display: absolute;
+	
+}
+
+#results .item {
+	padding: 3px;
+	font-family: Helvetica;
+	border-bottom: 1px solid #c0c0c0;
+}
+
+#results .item:last-child {
+	border-bottom: 0px;
+}
+
+#results .item:hover {
+	background-color: #f2f2f2;
+	cursor: pointer;
+}
+#resultsEmploi{
+  display: none;
+	width: 204px;
+	display: absolute;
+background-color:rgba(208, 202, 202, 0.58);	
+}
+
+.itemEmploi {
+	padding: 3px!important;
+	font-family: Helvetica!important;
+	border-bottom: 1px solid #c0c0c0!important;
+}
+
+.itemEmploi:last-child {
+	border-bottom: 0px!important;
+}
+
+.itemEmploi:hover {
+	background-color: #f2f2f2!important;
+	cursor: pointer!important;
+}
+#resultsRegime {
+  display: none;
+	width: 204px;
+	display: absolute;
+	
+}
+ .itemRegime {
+	padding: 3px;
+	font-family: Helvetica;
+	border-bottom: 1px solid #c0c0c0;
+}
+ .itemRegime:last-child {
+	border-bottom: 0px;
+}
+.itemRegime:hover {
+	background-color: #f2f2f2;
+	cursor: pointer;
+}
+#resultsGouvernorat {
+  display: none;
+	width: 204px;
+	display: absolute;
+	
+}
+ .itemGouvernorat {
+	padding: 3px;
+	font-family: Helvetica;
+	border-bottom: 1px solid #c0c0c0;
+}
+ .itemGouvernorat:last-child {
+	border-bottom: 0px;
+}
+.itemGouvernorat:hover {
+	background-color: #f2f2f2;
+	cursor: pointer;
+}
+#resultsresultsProduits {
+  display: none;
+	width: 204px;
+	display: absolute;
+	
+}
+ .itemresultsProduits {
+	padding: 3px;
+	font-family: Helvetica;
+	border-bottom: 1px solid #c0c0c0;
+}
+ .itemresultsProduits:last-child {
+	border-bottom: 0px;
+}
+.itemresultsProduits:hover {
+	background-color: #f2f2f2;
+	cursor: pointer;
+}

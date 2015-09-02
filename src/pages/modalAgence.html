@@ -1,0 +1,417 @@
+<div class="modal fade" id="AjouterAgence" role="dialog">
+    <div class="modal-dialog">
+ 
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button id="cancelAgenceX" type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><center>Agence</center></h4>
+
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal" id="AjouterAgenceForm" name="agence" method="post" action="">
+<fieldset>
+ 
+<!-- Form Name -->
+<legend><center><p>Ajouter une agence</p></center></legend>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="nomAgence">Nom de l'agence</label>  
+  <div class="col-md-5">
+  <input id="nomAgence" name="nomAgence" type="text" placeholder="saisir le nom de l'agence" class="form-control input-md" required="" >
+<p class="help-block" id="nomAgenceV"></p> 
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="couverture">Couverture</label>  
+  <div class="col-md-5">
+  <input id="couverture" name="couverture" type="text" placeholder="" class="form-control input-md" required="" onchange="change_couverture();">
+<p class="help-block" id="couvertur"></p> 
+  </div>  
+  </div>
+<div class="form-group">
+<label class="col-md-4 control-label" for="imgcouverture"></label>  
+<div class="col-md-5">
+<img id="imgcouverture" src="" width="100" height="100">
+</div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="mail">Mail</label>  
+  <div class="col-md-5">
+  <input id="mail" name="mail" type="mail" placeholder="" class="form-control input-md" required="">
+<p class="help-block" id="mailV"></p> 
+  </div>  
+  </div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="telfatx">Téléphone & Fax</label>  
+  <div class="col-md-3">
+  <input id="tel" name="tel" type="tel" placeholder="Numero Tel" class="form-control input-md" required="">
+<p class="help-block" id="telV"></p> 
+    </div>
+
+ <div class="col-md-3">
+  <input id="fax" name="fax" type="tel" placeholder="Numero Fax" class="form-control input-md" required="">
+  <p class="help-block" id="faxV"></p>   
+  </div>
+  </div>
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="Description">Description</label>
+  <div class="col-md-6">                     
+    <textarea class="form-control" id="Description" name="description" placeholder="Décrire votre agence..."></textarea>
+<p class="help-block" id="DescriptionV"></p> 
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="adresse">Adresse</label>
+  <div class="col-md-6">                     
+    <textarea class="form-control" id="adresse" name="adresse" placeholder="Adresse de votre agence..."></textarea>
+<p class="help-block" id="adresseV"></p> 
+  </div>
+</div>
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="Coordonnées">Coordonnées</label>  
+  <div class="col-md-3">
+  <input id="Latitude" name="Latitude" type="text" placeholder="Latitude" class="form-control input-md" required="">
+  </div>
+<div class="col-md-3">
+  <input id="Longitude" name="Longitude" type="text" placeholder="Longitude" class="form-control input-md" required="">
+    
+  </div>
+</div>
+<!-- Button (Double) -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="ajouter"></label>
+  <div class="col-md-8">
+    <input type="submit" id="ajouterAgencesubmit" name="ajouterAgence" class="btn btn-success" value="Ajouter" >
+    <button id="annuler" name="annuler" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+  </div>
+</div>
+
+</fieldset>
+</form>
+        </div>
+        <div class="modal-footer">
+          <button id="cancelAgence" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+
+
+
+<div class="modal fade" id="Mesagence" role="dialog">
+    
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" style="color:rgb(68, 145, 152);font-size:29px; font-weight: bold;"><center>Changer les infos de l'entreprise </center></h4>
+        </div>
+        <div class="modal-body">
+<?php
+
+$siren=$_SESSION['infos']['num_SIREN'];
+$id_enreprise=$_SESSION['infos_generale']['id_entreprise'];
+$message1="";
+$message2="";
+$message3="";
+$message4="";
+$message5="";
+$message6="";
+
+if(isset($_POST['submit_infos_generaleModif'])){
+$agences=afficher_agence($_SESSION['infos_generale']['id_entreprise']);
+if(mysql_num_rows($agences)>0)
+{
+while($agence = mysql_fetch_assoc($agences)) {
+if($_POST['idagencehidden']==$agence['id_agence']){
+$mailAgenceModif=$agence['mail_agence'];
+$telModif=$agence['tel_agence'];
+$faxModif=$agence['fax_agence'];
+$descriptionModif=$agence['type'];
+$adresseModif=$agence['adresse'];
+$couvertureModif=$agence['couverture'];
+}
+}
+}
+if(!empty($_POST['nomagenceModif'])){
+$nomagenceModif=$_POST['nomagenceModif'];
+$message1="Le nom de votre agence est modifié correctement";
+}
+if(!empty($_POST['couvertureModif'])){
+$couvertureModif=$_POST['couvertureModif'];
+$message1="La couverture de votre agence est modifié correctement";
+}
+if(!empty($_POST['mailAgenceModif'])){
+$mailAgenceModif=$_POST['mailAgenceModif'];
+$message2="Le email de votre agence est modifié correctement";
+}
+if(!empty($_POST['telModif'])){
+$telModif=$_POST['telModif'];
+$message3="Le numero de téléphone de votre agence est modifié correctement";
+}
+if(!empty($_POST['faxModif'])){
+$faxModif=$_POST['faxModif'];
+$message4="Le numero de fax de votre agence est modifié correctement";
+}
+if(!empty($_POST['descriptionModif'])){
+$descriptionModif=$_POST['descriptionModif'];
+$message5="La description de votre agence est modifié correctement";
+}
+if(!empty($_POST['adresseModif'])){
+$adresseModif=$_POST['adresseModif'];
+$message6="L'adresse de votre agence est modifié correctement";
+}
+if($_POST['validpasswordModif']==$_SESSION['infos_generale']['password']){
+Modifier_infos_agence($_POST['idagencehidden'],$nomagenceModif,$couvertureModif,$mailAgenceModif,$telModif,$faxModif,$descriptionModif,$adresseModif);
+?><meta http-equiv="refresh" content="1" /><?php
+echo "<script language=\"javascript\">waitingDialog.show();setTimeout(function () {waitingDialog.hide();}, 4000);</script>";
+echo "
+<div class=\"alert alert-success\">
+<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>
+<strong>Success!</strong>".$message1."<br>".$message2."<br>".$message3."<br>".$message4."<br>".$message5."<br>".$message6."
+</div>";
+}
+}
+if(isset($_POST['submit_infos_generaleSupp'])){
+if($_POST['validpasswordSupp']==$_SESSION['infos_generale']['password']){
+
+supprimer_agence($_POST['idagencehidden']);
+?><meta http-equiv="refresh" content="1" /><?php
+echo "<script language=\"javascript\">waitingDialog.show();setTimeout(function () {waitingDialog.hide();}, 4000);</script>";
+
+echo "
+<div class=\"alert alert-success\">
+<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>
+<strong>Success!</strong>Agence Supprimé!</div>";
+}
+}
+?>
+<form class="form-horizontal" action="" method="post" >
+<fieldset>
+<?php
+$agences=afficher_agence($_SESSION['infos_generale']['id_entreprise']);
+if(mysql_num_rows($agences)>0)
+{
+?>
+<!-- Form Name -->
+<h4 style="color:rgb(68, 145, 152);font-size:29px;text-decoration: underline;">Modifier infos </h4>
+<div class="generale" style="border-left-style: outset;
+  border-left-width: initial;border-bottom-style: outset;
+  border-bottom-width: initial;margin-top: 25px;margin-bottom: 25px;">
+<!-- Text input-->
+
+<div class="form-group">
+
+  <label class="col-md-4 control-label" for="type">Agence</label>
+<div class="col-md-4">
+    <select id="ListeMesAgence" name="type" class="form-control" onchange="change_valeur();">
+<option value="0"> Choisir une agence</option>";
+<?php 
+
+while($agence = mysql_fetch_assoc($agences)) {
+if($agence['type']=="Siege"){
+echo"
+      <option value=\"".$agence['id_agence']."\" disabled > ".$agence['nom_agence']." (Siege)</option>";
+}else{
+echo"
+      <option value=\"".$agence['id_agence']."\"> ".$agence['nom_agence']."</option>";
+
+}
+}
+?>
+    </select><br>
+<script>
+function change_couverture(){
+var src=document.getElementById('couverture').value;
+document.getElementById('imgcouverture').src=src;
+}
+function change_couvertureModif(){
+var src=document.getElementById('couvertureModif').value;
+document.getElementById('imgcouvertureModif').src=src;
+}
+function changeTextBouton(button_id) 
+{
+
+     var el = document.getElementById(button_id);
+   if (el.firstChild.data == "Modifier Agence") 
+   {
+       el.firstChild.data = "Annuler Modification";
+       document.getElementById('submit_infosModif').focus();
+       document.getElementById('submit_infosModif').required;
+     //boutoon supp not focused 
+   }
+   else 
+   {
+     el.firstChild.data = "Modifier Agence";
+      document.getElementById('passwordSupp').focus();
+      document.getElementById('passwordSupp').required;
+     //boutoon supp is focused 
+   }
+}
+function change_valeur() {
+select = document.getElementById("ListeMesAgence");
+choice = select.selectedIndex;
+valeur = select.options[choice].value;
+ texte = select.options[choice].text;
+document.getElementById('nomagenceModif').value = texte;
+//window.open('./EspacEntreprise.php?idagence=' + valeur); 
+document.getElementById('idagencehidden').value = valeur;
+if(texte!="Choisir une agence"){
+document.getElementById('btnsupp').disabled = false;
+document.getElementById('btnmodif').disabled = false;
+document.getElementById('btnvalid').disabled = false;
+}else{
+document.getElementById('btnsupp').disabled = true;
+document.getElementById('btnmodif').disabled = true;
+document.getElementById('btnvalid').disabled = true;
+}
+}
+ </script>
+<button type="button" class="btn btn-info" id="btnmodif" data-toggle="collapse" data-target="#ChoisirAgence" onclick="changeTextBouton('btnmodif')" disabled>Modifier Agence</button>
+  </div>
+
+ <button type="button" class="btn btn-danger" id="btnsupp" data-toggle="collapse" data-target="#SupprimerAgence" disabled>Supprimer Agence</button>
+
+</div>
+<div id="SupprimerAgence" class="collapse in">
+<div class="form-group">
+  <label class="col-md-4 control-label" for="password">Password</label>
+  <div class="col-md-4">
+    <input id="passwordSupp" name="validpasswordSupp" type="password" placeholder="" class="form-control input-md" >
+    
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="submit"></label>
+  <div class="col-md-4">
+
+    <input type="submit" name="submit_infos_generaleSupp" id="submit_infosSupp" class="btn btn-success " value="Valider">
+    <button id="annuler" name="annuler" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+  </div></div>
+</div>
+<div id="ChoisirAgence" class="collapse in">
+<div class="form-group">
+  <label class="col-md-4 control-label" for="login">Nom</label>  
+  <div class="col-md-5">
+  <input id="nomagenceModif" name="nomagenceModif" type="text" placeholder="" class="form-control input-md" >
+   <input id="idagencehidden" name="idagencehidden" type="hidden"> 
+  </div>
+
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="couvertureModif">Couverture</label>  
+  <div class="col-md-5">
+  <input id="couvertureModif" name="couvertureModif" type="text" placeholder="" class="form-control input-md"  onchange="change_couvertureModif();">
+<p class="help-block" id="couverturModif"></p> 
+  </div>  
+  </div>
+<div class="form-group">
+<label class="col-md-4 control-label" for="imgcouvertureModif"></label>  
+<div class="col-md-5">
+<img id="imgcouvertureModif" src="" width="100" height="100">
+</div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="mail">Mail</label>  
+  <div class="col-md-5">
+  <input id="mailAgenceModif" name="mailAgenceModif" type="mail" placeholder="" class="form-control input-md" >
+  </div>  
+  </div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="telfatx">Téléphone & Fax</label>  
+  <div class="col-md-3">
+  <input id="telModif" name="telModif" type="telModif" placeholder="Numero Tel" class="form-control input-md">
+    </div>
+
+ <div class="col-md-3">
+  <input id="faxModif" name="faxModif" type="tel" placeholder="Numero Fax" class="form-control input-md" >
+    
+  </div>
+  </div>
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="Description">Description</label>
+  <div class="col-md-6">                     
+    <textarea class="form-control" id="DescriptionModif" name="descriptionModif" placeholder="Décrire votre agence..."></textarea>
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="adresse">Adresse</label>
+  <div class="col-md-6">                     
+    <textarea class="form-control" id="adresseModif" name="adresseModif" placeholder="Adresse de votre agence..."></textarea>
+<br>
+<button type="button" id="btnvalid" class="btn btn-info" data-toggle="collapse" data-target="#Confirmer">Saisir votre password</button>
+  </div>
+</div>
+
+
+
+
+
+
+<div id="Confirmer" class="collapse in">
+<div class="form-group">
+  <label class="col-md-4 control-label" for="password">Password</label>
+  <div class="col-md-4">
+    <input id="passwordModif" name="validpasswordModif" type="password" placeholder="" class="form-control input-md">
+    
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="submit"></label>
+  <div class="col-md-4">
+
+    <input type="submit" name="submit_infos_generaleModif" id="submit_infosModif" class="btn btn-success " value="Valider">
+    <button id="annuler" name="annuler" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+  </div></div>
+</div></div>
+
+</div>
+<?php }else
+{
+echo "Pas d'agence";
+}?>
+</fieldset>
+</form>
+</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+
+
+<div class="modal fade" id="rediredct" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal">&times;</button>
+<p style="color: rgb(255,0,0);text-align: center;font-size: 20px!important;">Notification</p>
+        
+        </div>
+        <div class="modal-body">
+          <p style="color: rgb(197, 33, 33);text-align: center;">Clicker sur la carte sur l'endroit ou votre agence existe</p>
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>
+
+
+

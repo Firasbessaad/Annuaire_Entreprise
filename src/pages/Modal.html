@@ -1,0 +1,841 @@
+<div class="modal fade" id="AjouterGalerie" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><center>Galerie</center></h4>
+        </div>
+        
+        <div class="modal-body">
+<?php
+if(isset($_POST['ajouterphoto'])){
+$image=$_FILES['image']['name'];
+$image_tmp=$_FILES['image']['tmp_name'];
+move_uploaded_file($image_tmp,'avatars/'.$image);
+if(!empty($_POST['titre'])){
+$titre=$_POST['titre'];
+}
+if(!empty($_POST['description'])){
+$description=$_POST['description'];
+}
+ajouter_photo($_SESSION['infos_generale']['id_entreprise'],$titre,$description,$image);
+echo "<script language=\"javascript\">waitingDialog.show();setTimeout(function () {waitingDialog.hide();}, 4000);</script>";
+?><meta http-equiv="refresh" content="1" /><?php
+}
+?>  
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+<fieldset>
+<h4 style="color:rgb(68, 145, 152);font-size:26px;text-decoration: underline;">Ajouter des photos</h4>
+          <div class="generale" style="border-left-style: outset;
+  border-left-width: initial;border-bottom-style: outset;
+  border-bottom-width: initial;margin-top: 25px;margin-bottom: 25px;">
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="Titre">Titre du photo</label>  
+  <div class="col-md-5">
+  <input id="Titre" name="titre" type="text" placeholder="Titre du photo..." class="form-control input-md" required="" autofocus>
+    
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="Description">Description</label>
+  <div class="col-md-4">                     
+    <textarea class="form-control" id="Description" name="description" required="">Ecrire quelque chose...</textarea>
+  </div>
+</div>
+<!-- File Button --> 
+<div class="form-group">
+  <label class="col-md-4 control-label" for="couverture">photo</label>
+  <div class="col-md-4">
+<input type="file" id="couverture" name="image" class="myButton" required="">
+<img src="./img/image.png" width="75" height="75" class="img-responsive push">
+ <br>
+   
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="submit"></label>
+  <div class="col-md-8">
+    <input type="submit" id="submit" name="ajouterphoto" class="btn btn-success " value="Ajouter">
+    <button id="annuler" name="annuler" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+  </div>
+</div>
+</div>
+
+<!-- Button (Double) -->
+
+
+</fieldset>
+</form>
+
+
+</div>
+<div class="modal-footer">
+
+
+       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>    
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+
+
+
+<div class="modal fade" id="SupprimerProduit" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><center>Supprimer un Produit</center></h4>
+        </div>
+        <div class="modal-body">
+       <h4 style="color:rgb(68, 145, 152);font-size:26px;text-decoration: underline;">Supprimer un Produit</h4>
+
+          <div class="generale" style="border-left-style: outset;
+  border-left-width: initial;border-bottom-style: outset;
+  border-bottom-width: initial;margin-top: 25px;margin-bottom: 25px;">   
+<form class="form-horizontal" action="" method="post">
+<fieldset>
+<?php 
+//$produits=afficher_produit($_SESSION['infos_generale']['id_entreprise']);
+$types=type_produit($_SESSION['infos_generale']['id_entreprise']);
+while($type = mysql_fetch_assoc($types)) { 
+$produits=produit_du_type($_SESSION['infos_generale']['id_entreprise'],$type['id']);
+echo "<div class=\"form-group\">
+  <label class=\"col-md-4 control-label\" for=\"produits\">".$type['nom_type']."</label>
+  <div class=\"col-md-4\"><div class=\"generale\" style=\"border-left-style: outset;
+  border-left-width: initial;border-bottom-style: outset;
+  border-bottom-width: initial;margin-top: 25px;margin-bottom: 25px;\">";
+while($produit = mysql_fetch_assoc($produits)){
+  echo "<div class=\"checkbox\">
+
+    <label for=\"produits-0\">
+      <input type=\"checkbox\" name=\"check_list[]\" id=\"produits-0\" value=".$produit['id_produit'].">
+      ".$produit['nom_produit']."
+    </label>
+	</div>"; }echo" </div></div>
+</div>"; }?>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="submit"></label>
+  <div class="col-md-8">
+    <input type="submit" id="submit" name="supprimerProduit" class="btn btn-success " value="Valider">
+    <button id="annuler" name="annuler" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+  </div>
+</div>
+</fieldset>
+</form>
+<?php
+
+if(isset($_POST['supprimerProduit'])){
+if(!empty($_POST['check_list'])) {
+foreach($_POST['check_list'] as $selected) {
+
+//appel à la fonction de suppression
+supprimer_produit($_SESSION['infos_generale']['id_entreprise'],$selected);
+}
+}
+echo "<script language=\"javascript\">waitingDialog.show();setTimeout(function () {waitingDialog.hide();}, 4000);</script>";
+?><meta http-equiv="refresh" content="1" /><?php
+
+}
+?>
+</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+
+<div class="modal fade" id="AjouterProduit" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><center>Ajouter un Produit</center></h4>
+        
+<?php
+$types=type_produit($_SESSION['infos_generale']['id_entreprise']);
+if(isset($_POST['ajouterproduit'])){
+$nomproduit=$_POST['nomproduit'];
+$description=$_POST['description'];
+$type_saisie=$_POST['type'];
+$image=$_FILES['image']['name'];
+$image_tmp=$_FILES['image']['tmp_name'];
+move_uploaded_file($image_tmp,'Produit/'.$image);
+ajouter_Produit($_SESSION['infos_generale']['id_entreprise'],$nomproduit,$description,$type_saisie,$image);
+echo "<script language=\"javascript\">waitingDialog.show();setTimeout(function () {waitingDialog.hide();}, 4000);</script>";
+?><meta http-equiv="refresh" content="1" /><?php
+}
+?></div>
+        <div class="modal-body">
+       <h4 style="color:rgb(68, 145, 152);font-size:26px;text-decoration: underline;">Ajouter un Produit</h4>
+
+          <div class="generale" style="border-left-style: outset;
+  border-left-width: initial;border-bottom-style: outset;
+  border-bottom-width: initial;margin-top: 25px;margin-bottom: 25px;">   
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+<fieldset>
+
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="nomproduit">Nom produit</label>  
+  <div class="col-md-5">
+  <input id="nomproduit" name="nomproduit" type="text" placeholder="" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="description">Description</label>
+  <div class="col-md-6">                     
+    <textarea class="form-control" id="description" name="description" required=""></textarea>
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="type">Type</label>
+  <div class="col-md-4">
+    <select id="type" name="type" class="form-control">
+    <?php while($type = mysql_fetch_assoc($types)) {
+echo "<option value=\"".$type['id']."\">".$type['nom_type']."</option>
+      ";}?>
+    </select>
+  </div>
+</div>
+
+<!-- File Button --> 
+<div class="form-group">
+  <label class="col-md-4 control-label" for="image">Image</label>
+  <div class="col-md-4">
+    <input id="image" name="image" class="input-file" type="file" required="">
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="button1id"></label>
+  <div class="col-md-8">
+    <button id="ajouterproduit" name="ajouterproduit" class="btn btn-success">Ajouter</button>
+    <button id="button2id" name="button2id" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+  </div>
+</div>
+</fieldset>
+</form>
+</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+<div class="modal fade" id="AjouterTypeProduit" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><center>Ajouter un type de produit</center></h4>
+<?php
+if(isset($_POST['AjouterTypeProduit'])){
+$nomtype=$_POST['nomtype'];
+$description=$_POST['description'];
+if(!empty($nomtype)&&!empty($description)){
+ajouter_Type_Produit($_SESSION['infos_generale']['id_entreprise'],$nomtype,$description);
+echo "<script language=\"javascript\">waitingDialog.show();setTimeout(function () {waitingDialog.hide();}, 4000);</script>";
+?><meta http-equiv="refresh" content="1" /><?php
+}}
+?>
+        </div>
+        <div class="modal-body">
+      <h4 style="color:rgb(68, 145, 152);font-size:26px;text-decoration: underline;">Ajouter un type de produit</h4>
+          <div class="generale" style="border-left-style: outset;
+  border-left-width: initial;border-bottom-style: outset;
+  border-bottom-width: initial;margin-top: 25px;margin-bottom: 25px;">   
+<form class="form-horizontal" action="" method="post">
+<fieldset>
+
+
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="nomtype">Nom de type</label>  
+  <div class="col-md-5">
+  <input id="nomtype" name="nomtype" type="text" placeholder="" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="description">Description</label>
+  <div class="col-md-6">                     
+    <textarea class="form-control" id="description" name="description" required=""></textarea>
+  </div>
+</div>
+
+<div class="form-group">
+ <label class="col-md-4 control-label" for="button1id"></label>
+  <div class="col-md-8">
+    <button id="AjouterTypeProduit" name="AjouterTypeProduit" class="btn btn-success">Ajouter</button>
+    <button id="Annuler" name="Annuler" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+  </div>
+</div>
+</fieldset>
+</form>
+
+        </div></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      </div>
+    </div>
+
+<div class="modal fade" id="AjouterEmploi" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><center>Offre d'emploi</center></h4>
+        </div>
+        <div class="modal-body">
+          <p>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+
+
+<div class="modal fade" id="AjouterActualite" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><center>Actualité</center></h4>
+        </div>
+        <div class="modal-body">
+          
+ <h4 style="color:rgb(68, 145, 152);font-size:26px;text-decoration: underline;">Ajouter une actualité</h4>
+          <div class="generale" style="border-left-style: outset;
+  border-left-width: initial;border-bottom-style: outset;
+  border-bottom-width: initial;margin-top: 25px;margin-bottom: 25px;"> 
+
+<form class="form-horizontal" method="post" action="">
+<fieldset>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="titre">Titre</label>  
+  <div class="col-md-4">
+  <input id="titre" name="titre" type="text" placeholder="" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="details">Détails</label>
+  <div class="col-md-6">                     
+    <textarea class="form-control" id="details" name="details" rows="8"></textarea>
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="image">Image url</label>  
+  <div class="col-md-4">
+  <input id="image" name="image" type="text" placeholder="" class="form-control input-md">  
+  </div>
+</div>
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="date">Date</label>  
+  <div class="col-md-4">
+  <input id="date" name="date" type="date"  class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="type">Type</label>  
+  <div class="col-md-4">
+  <input id="type" name="type" type="text" placeholder="" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Button (Double) -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="sauvgarder"></label>
+  <div class="col-md-8">
+    <button id="sauvgarder" name="sauvgarder" class="btn btn-success">Ajouter</button>
+    <button id="annuler" name="annuler" class="btn btn-danger"  data-dismiss="modal">Annuler</button>
+  </div>
+</div>
+
+</fieldset>
+</form>
+
+</div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+
+
+
+
+<div class="modal fade" id="parametre" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" style="color:rgb(68, 145, 152);font-size:29px; font-weight: bold;"><center>Changer les infos de l'entreprise </center></h4>
+        </div>
+        <div class="modal-body">
+<ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#infogenerale">Home</a></li>
+    <li><a data-toggle="tab" href="#ModifSite">Modifier le site</a></li>
+  </ul>
+<div class="tab-content">
+    <div id="infogenerale" class="tab-pane fade in active">
+
+<?php
+
+$siren=$_SESSION['infos']['num_SIREN'];
+$id_enreprise=$_SESSION['infos_generale']['id_entreprise'];
+$message1="";
+$message2="";
+$message3="";
+if(isset($_POST['submit_infos_generale'])){
+
+if(!empty($_POST['login'])){
+$mail=$_POST['login'];
+$message1="Votre login est modifié correctement";
+}else{
+$mail=$_SESSION['infos']['mail_responsable'];
+}
+if(!empty($_POST['type'])){
+$type=$_POST['type'];
+$message2="Le type de votre compte est modifié correctement";
+}else{
+$type=$_SESSION['infos_generale']['type_compte'];
+}
+if(!empty($_POST['newpassword'])){
+$newpassword=$_POST['newpassword'];
+$message3="Votre password est modifié correctement";
+}else{
+$newpassword=$_SESSION['infos_generale']['password'];
+}
+if($_POST['validpassword']==$_SESSION['infos_generale']['password']){
+changer_infos_generale($mail,$_SESSION['infos_generale']['password'],$newpassword,$type,$id_enreprise);
+$infos_generale=recuperer_info_generale($_SESSION['infos_generale']['login']);
+$_SESSION['infos_generale']=$infos_generale;
+echo "<script language=\"javascript\">waitingDialog.show();setTimeout(function () {waitingDialog.hide();}, 4000);</script>";
+echo "
+<div class=\"alert alert-success\">
+<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>
+<strong>Success!</strong>".$message1."<br>".$message2."<br>".$message3."
+</div>";
+}
+}
+?>
+<form class="form-horizontal" action="" method="post" >
+<fieldset>
+
+<!-- Form Name -->
+<h4 style="color:rgb(68, 145, 152);font-size:29px;text-decoration: underline;">Paramètres généraux</h4>
+<div class="generale" style="border-left-style: outset;
+  border-left-width: initial;border-bottom-style: outset;
+  border-bottom-width: initial;margin-top: 25px;margin-bottom: 25px;">
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="login">Login</label>  
+  <div class="col-md-5">
+  <input id="login" name="login" type="text" placeholder="<?php echo $_SESSION['infos_generale']['login']?>" class="form-control input-md" >
+    
+  </div>
+</div>
+
+
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="newpassword">Nouveau password</label>
+  <div class="col-md-4">
+    <input id="newpassword" name="newpassword" type="password" placeholder="" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="type">Type</label>
+  <div class="col-md-4">
+    <select id="type" name="type" class="form-control">
+      <option value="PDG"<?php $test="PDG"; if($_SESSION['infos_generale']['type_compte']==$test) {echo "selected";}?>>PDG</option>
+      <option value="DGA"<?php $test="DGA";if($_SESSION['infos_generale']['type_compte']==$test){ echo "selected";}?>>DGA</option>
+      <option value="simple"<?php $test="simple";if($_SESSION['infos_generale']['type_compte']==$test){echo "selected";}?>>simple</option>
+    </select><br>
+<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#info_g">Saisir votre password</button>
+  </div>
+
+</div><div id="info_g" class="collapse in">
+<div class="form-group">
+  <label class="col-md-4 control-label" for="password">Password</label>
+  <div class="col-md-4">
+    <input id="password" name="validpassword" type="password" placeholder="" class="form-control input-md" required="" autofocus>
+    
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="submit"></label>
+  <div class="col-md-4">
+
+    <input type="submit" name="submit_infos_generale" id="submit_infos" class="btn btn-success " value="Valider">
+    <button id="annuler" name="annuler" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+  </div></div>
+</div>
+</div>
+</fieldset>
+</form>
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+<fieldset>
+<h4 style="color:rgb(68, 145, 152);font-size:26px;text-decoration: underline;">Paramètres de l'entreprise</h4>
+<?php
+
+$siren=$_SESSION['infos']['num_SIREN'];
+
+if(isset($_POST['submit_infos'])){
+
+if (isset($_FILES['logo'])){
+$logo=$_FILES['logo']['name'];
+$logo_tmp=$_FILES['logo']['tmp_name'];
+move_uploaded_file($logo_tmp,'avatars/'.$logo);
+}else{
+$logo=$_SESSION['infos']['logo'];
+}
+
+
+$mail=$_SESSION['infos']['mail_responsable'];
+
+if(!empty($_POST['nomEntreprise'])){
+$nomEntreprise=$_POST['nomEntreprise'];
+}else{
+$nomEntreprise=$_SESSION['infos']['nom'];
+}
+
+if(!empty($_POST['tel'])){
+$tel=$_POST['tel'];
+}else{
+$tel=$_SESSION['infos']['telephone'];
+}
+if(!empty($_POST['fax'])){
+$fax=$_POST['fax'];
+}else{
+$fax=$_SESSION['infos']['fax'];
+}
+if(!empty($_POST['adresse'])){
+$adresse=$_POST['adresse'];
+}else{
+$adresse=$_SESSION['infos']['adresse'];
+}
+if(!empty($_POST['site'])){
+$site=$_POST['site'];
+}else{
+$site=$_SESSION['infos']['site_web'];
+}
+changer_infos($siren,$mail,$nomEntreprise,$tel,$fax,$adresse,$site,$logo);
+$infos=recuperer_info($_SESSION['infos_generale']['id_entreprise']);
+die($infos);
+$_SESSION['infos']=$infos;
+}
+?>
+<div class="generale" style="border-left-style: outset;
+  border-left-width: initial;border-bottom-style: outset;
+  border-bottom-width: initial;margin-top: 25px;margin-bottom: 25px;">
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="nomEntreprise">Nom de l'entreprise</label>  
+  <div class="col-md-5">
+  <input id="nomEntreprise" name="nomEntreprise" type="text" placeholder="<?php echo $_SESSION['infos']['nom']?>" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="tel">Télephone</label>  
+  <div class="col-md-4">
+  <input id="tel" name="tel" type="tel" placeholder="<?php echo $_SESSION['infos']['telephone']?>" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="fax">Fax</label>  
+  <div class="col-md-4">
+  <input id="fax" name="fax" type="text" placeholder="<?php echo $_SESSION['infos']['fax']?>" class="form-control input-md">
+    
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="adresse">Adresse</label>
+  <div class="col-md-4">                     
+    <textarea class="form-control" id="adresse" name="adresse"><?php echo $_SESSION['infos']['adresse']?></textarea>
+  </div>
+</div>
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="site">Site Web</label>  
+  <div class="col-md-4">
+  <input id="site" name="site" type="text" placeholder="<?php echo $_SESSION['infos']['site_web']?>" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- File Button --> 
+<div class="form-group">
+  <label class="col-md-4 control-label" for="logo">Logo</label>
+  <div class="col-md-4">
+<input type="file" id="logo" name="logo" class="myButton">
+<img src="avatars/<?php echo $_SESSION['infos']['logo']?>" width="75" height="75" class="img-responsive push">
+ <br>
+<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#info_en">Saisir votre password</button>
+    
+  </div>
+
+</div>
+<div id="info_en" class="collapse in">
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="password">Password</label>
+  <div class="col-md-4">
+    <input id="password" name="password" type="password" placeholder="" class="form-control input-md" required="">
+    
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="submit"></label>
+  <div class="col-md-8">
+    <input type="submit" id="submit_infos" name="submit_infos" class="btn btn-success " value="Valider">
+    <button id="annuler" name="annuler" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+  </div>
+</div>
+</div>
+</div>
+<!-- Button (Double) -->
+
+
+</fieldset>
+</form>
+</div>
+<div id="ModifSite" class="tab-pane fade">
+<form class="form-horizontal" action="" method="post">
+<?php
+if(isset($_POST['changerbg'])){
+if (!empty($_POST['slide1'])){
+$slide1=$_POST['slide1'];
+list($width, $height, $type, $attr) = getimagesize($slide1);
+if($type!=2||$type!=3){
+if($width>900 && $height<315){
+modifier_slide($_SESSION['infos_generale']['id_entreprise'],1,$slide1);
+}else{
+echo "<script>alert(\"les dimensions de votre image sont insupportables\");</script>";
+}
+}
+}
+if (!empty($_POST['slide2'])){
+$slide2=$_POST['slide2'];
+list($width, $height, $type, $attr) = getimagesize($slide2);
+if($type!=2||$type!=3){
+if($width==1600 && $height==550){
+modifier_slide($_SESSION['infos_generale']['id_entreprise'],2,$slide2);
+}else{
+echo "<script>alert(\"les dimensions de votre image sont insupportables\");</script>";
+}
+}
+}
+if (!empty($_POST['slide3'])){
+$slide3=$_POST['slide3'];
+list($width, $height, $type, $attr) = getimagesize($slide3);
+if($type!=2||$type!=3){
+if($width==1600 && $height==550){
+modifier_slide($_SESSION['infos_generale']['id_entreprise'],3,$slide3);
+}else{
+echo "<script>alert(\"les dimensions de votre image sont insupportables\");</script>";
+}
+}
+}
+}
+?>
+<fieldset>
+
+<!-- Form Name -->
+<h4 style="color:rgb(68, 145, 152);font-size:26px;text-decoration: underline;">Changer Slides</h4>
+<div class="generale" style="border-left-style: outset;
+  border-left-width: initial;border-bottom-style: outset;
+  border-bottom-width: initial;margin-top: 25px;margin-bottom: 25px;">
+<!-- Select Basic -->
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="slide1">Path slide1</label>  
+  <div class="col-md-5">
+  <input id="slide1" name="slide1" type="text" placeholder="" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="slide2">Path slide2</label>  
+  <div class="col-md-5">
+  <input id="slide2" name="slide2" type="text" placeholder="" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="slide3">Path slide3</label>  
+  <div class="col-md-5">
+  <input id="slide3" name="slide3" type="text" placeholder="" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Button (Double) -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="changer"></label>
+  <div class="col-md-8">
+    <button id="changerbg" name="changerbg" class="btn btn-success">Changer</button>
+    <button id="button2id" name="button2id" class="btn btn-danger" data-dismiss="modal" >Annuler</button>
+  </div>
+</div>
+</div>
+</fieldset>
+</form>
+<form class="form-horizontal" method="post" action="">
+<fieldset>
+
+<!-- Form Name -->
+<h4 style="color:rgb(68, 145, 152);font-size:26px;text-decoration: underline;">Changer Caracteristiques</h4>
+<div class="generale" style="border-left-style: outset;
+  border-left-width: initial;border-bottom-style: outset;
+  border-bottom-width: initial;margin-top: 25px;margin-bottom: 25px;">
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="caracteristiques">Caracteristique</label>  
+  <div class="col-md-4">
+  <input id="caracteristiques" name="caracteristiques" type="text" placeholder="saisir une caracteristique" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="detail">Details</label>
+  <div class="col-md-4">                     
+    <textarea class="form-control" id="detail" name="detail"></textarea>
+  </div>
+</div>
+
+<!-- Button (Double) -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="changer"></label>
+  <div class="col-md-8">
+    <button id="changer" name="changer" class="btn btn-success">Changer</button>
+    <button id="button2id" name="button2id" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+  </div>
+</div>
+</div>
+</fieldset>
+</form>
+<form class="form-horizontal" action="" method="post">
+<fieldset>
+<h4 style="color:rgb(68, 145, 152);font-size:26px;text-decoration: underline;">Changer A propos de nous</h4>
+<div class="generale" style="border-left-style: outset;
+  border-left-width: initial;border-bottom-style: outset;
+  border-bottom-width: initial;margin-top: 25px;margin-bottom: 25px;">
+<?php
+if(isset($_POST['changerapropos'])){
+if (!empty($_POST['detail'])){
+modifier_apropos($_SESSION['infos_generale']['id_entreprise'],$_POST['detail']);
+}}
+?>
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="detail">A propos de nous</label>
+  <div class="col-md-4">                     
+    <textarea class="form-control" id="detail" name="detail"></textarea>
+  </div>
+</div>
+
+<!-- Button (Double) -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="changer"></label>
+  <div class="col-md-8">
+    <button id="changerapropos" name="changerapropos" class="btn btn-success">Changer</button>
+    <button id="button2id" name="button2id" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+  </div>
+</div>
+</div>
+</fieldset>
+</form>
+
+
+
+</div>
+</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+
+
+
+
+
+
